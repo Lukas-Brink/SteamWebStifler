@@ -1,0 +1,32 @@
+# Byte-compiled / optimized / Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# PyInstaller outputs & compiled executables
+build/
+dist/
+*.exe
+*.spec.bak
+
+# Local runtime data & caches
+data/
+*.log
+.port
+
+# Environments & virtualenvs
+.env
+.venv
+env/
+venv/
+ENV/
+
+# IDE, Editor, and OS metadata
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+Thumbs.db
+Desktop.ini
+.DS_Store

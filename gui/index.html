@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Steam Web Stifler</title>
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app" class="app-container">
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <div class="brand">
+        <img class="brand-logo" src="logo.png" alt="SteamWebStifler" />
+        <span class="brand-title">STEAMWEBSTIFLER</span>
+        <span class="badge-version">v1.3</span>
+      </div>
+
+      <div class="top-controls">
+        <div id="telemetryPill" class="telemetry-pill">
+          WebHelper: <span id="telemRam">--</span> MB • <span id="telemCpu">--</span>% CPU
+        </div>
+
+        <label class="toggle-container" title="WebHelper Stifler">
+          <input type="checkbox" id="limiterToggle" />
+          <span class="toggle-slider"></span>
+        </label>
+
+        <button id="btnSettings" class="btn-secondary" title="Preferences & System Integration">
+          ⚙ Settings
+        </button>
+
+        <button id="btnToggleLogs" class="btn-secondary btn-logs" title="Diagnostic logs drawer">
+          &gt;_ Logs
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="workspace">
+      <!-- Left Pane: Games List -->
+      <aside class="sidebar">
+        <div class="search-box">
+          <svg class="search-icon" viewBox="0 0 16 16" width="14" height="14" fill="currentColor">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+          </svg>
+          <input type="text" id="searchInput" placeholder="Search games (Ctrl+F)..." autocomplete="off" />
+          <button id="clearSearchBtn" class="clear-search-btn" style="display: none;">✕</button>
+        </div>
+
+        <div class="filter-bar">
+          <span id="gamesCount" class="games-count">0 Games</span>
+          <div class="sort-wrapper">
+            <select id="sortSelect" class="sort-select">
+              <option value="Recent">Recent</option>
+              <option value="Name">Name (A-Z)</option>
+              <option value="Size">Size (Largest)</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="gamesList" class="games-list">
+          <!-- Game rows dynamically injected here -->
+        </div>
+      </aside>
+
+      <!-- Right Pane: Game Inspector & Collapsible Logs Drawer -->
+      <section class="inspector-pane">
+        <div class="inspector-scroll-area">
+          <!-- Hero Banner Container -->
+          <div class="banner-wrapper">
+            <img id="bannerImg" class="banner-image" src="" alt="Game Banner" />
+            <div class="banner-gradient"></div>
+          </div>
+
+          <!-- Game Overview Card -->
+          <div class="card info-card">
+            <h1 id="inspectTitle" class="game-title">Select a game to inspect</h1>
+            <div id="inspectMeta" class="meta-row">
+              AppID: --   •   Size: --   •   Last Played: --
+            </div>
+
+            <div class="action-row">
+              <button id="btnLaunch" class="btn-primary">Launch Game</button>
+              <span id="launchFeedback" class="launch-feedback"></span>
+            </div>
+          </div>
+
+          <!-- Installation Details Card -->
+          <div class="card details-card">
+            <div class="card-header">INSTALLATION DETAILS</div>
+            <div class="detail-item">
+              <span class="detail-label">Directory:</span>
+              <span id="detailDir" class="detail-val">--</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Executable:</span>
+              <span id="detailExe" class="detail-val">--</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Library:</span>
+              <span id="detailLib" class="detail-val">--</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Collapsible Diagnostic Logs Drawer -->
+        <div id="logsDrawer" class="logs-drawer collapsed">
+          <div class="logs-header">
+            <span class="logs-title">DIAGNOSTIC LOGS</span>
+            <div class="logs-actions">
+              <button id="btnClearLogs" class="btn-ghost">Clear</button>
+              <button id="btnCopyLogs" class="btn-ghost">Copy</button>
+              <button id="btnOpenFile" class="btn-ghost">Open File</button>
+              <button id="btnCloseLogs" class="btn-ghost">Hide</button>
+            </div>
+          </div>
+          <div id="logsConsole" class="logs-console"></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Mini Settings Modal Overlay -->
+    <div id="settingsModal" class="modal-overlay" style="display: none;">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2 class="modal-title">SETTINGS</h2>
+          <span class="modal-subtitle">Preferences &amp; System Integration</span>
+        </div>
+
+        <div class="settings-rows">
+          <div class="setting-row">
+            <div class="setting-info">
+              <span class="setting-title">Run at Windows Startup</span>
+              <span class="setting-desc">Auto-launch SteamWebStifler minimized to tray when booting Windows</span>
+            </div>
+            <label class="toggle-container">
+              <input type="checkbox" id="settingStartup" />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <span class="setting-title">Start with WebHelper Stifler Enabled</span>
+              <span class="setting-desc">Keep steamwebhelper throttled immediately upon launching</span>
+            </div>
+            <label class="toggle-container">
+              <input type="checkbox" id="settingLimiter" />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <span class="setting-title">Close to System Tray</span>
+              <span class="setting-desc">Clicking close minimizes the launcher to the background tray icon</span>
+            </div>
+            <label class="toggle-container">
+              <input type="checkbox" id="settingTray" />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <span id="savedIndicator" class="saved-indicator"></span>
+          <button id="btnSaveSettings" class="btn-secondary">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
